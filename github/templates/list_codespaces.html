@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seleccionar Codespace</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+      }
+      .navbar {
+        background-color: #007bff;
+        padding: 10px;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .menu-icon {
+        font-size: 30px;
+        cursor: pointer;
+      }
+      .menu {
+        display: none;
+        flex-direction: column;
+        background-color: #ffffff;
+        position: absolute;
+        top: 50px;
+        right: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        z-index: 1000;
+      }
+      .menu a {
+        padding: 10px 20px;
+        text-decoration: none;
+        color: #007bff;
+        border-bottom: 1px solid #ccc;
+        transition: background-color 0.3s;
+      }
+      .menu a:hover {
+        background-color: #f0f0f0;
+      }
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: calc(100vh - 100px);
+        flex-direction: column;
+      }
+      .form {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        width: 300px;
+      }
+      h1 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+      }
+      label {
+        display: block;
+        margin-bottom: 5px;
+        color: #555;
+      }
+      select {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background-color: #fff;
+        font-size: 16px;
+      }
+      button {
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navbar">
+      <div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
+      <div class="menu" id="menu">
+        <a href="{% url 'login' %}">Iniciar sesión</a>
+        <a href="{% url 'logout' %}">Cerrar sesión</a>
+        <a href="{% url 'register' %}">Registrar</a>
+        <a href="{% url 'change_password' %}">Cambiar contraseña</a>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="form">
+        <h1>Seleccionar Codespace</h1>
+        <form method="POST">
+          {% csrf_token %}
+          <label for="codespace">Escoge tu codespace:</label>
+          <select name="codespace" id="codespace" required>
+            {% for cs in codespaces %}
+            <option value="{{ cs.name }}">{{ cs.name }}</option>
+            {% endfor %}
+          </select>
+          <button type="submit">Conectar</button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      function toggleMenu() {
+        const menu = document.getElementById("menu");
+        menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+      }
+
+      window.onclick = function (event) {
+        if (!event.target.matches(".menu-icon")) {
+          const menu = document.getElementById("menu");
+          if (menu.style.display === "flex") {
+            menu.style.display = "none";
+          }
+        }
+      };
+    </script>
+  </body>
+</html>
